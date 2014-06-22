@@ -2,7 +2,10 @@ package client;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
+import server.Stock;
+
 import javax.jms.*;
+
 import java.util.Random;
  
 public class Client implements MessageListener {
@@ -42,7 +45,7 @@ public class Client implements MessageListener {
  
             //Now create the actual message you want to send
             TextMessage txtMessage = session.createTextMessage();
-            txtMessage.setText("MyProtocolMessage");
+            txtMessage.setText("BMW");
  
             //Set the reply to field to the temp queue you created above, this is the queue the server
             //will respond to
@@ -68,16 +71,16 @@ public class Client implements MessageListener {
     }
  
     public void onMessage(Message message) {
-        String messageText = null;
-        try {
-            if (message instanceof TextMessage) {
-                TextMessage textMessage = (TextMessage) message;
-                messageText = textMessage.getText();
-                System.out.println("messageText = " + messageText);
-            }
-        } catch (JMSException e) {
-            //Handle the exception appropriately
-        }
+        ObjectMessage msg = (ObjectMessage)message;
+        Stock stock = null;
+	try {
+	    stock = (Stock)msg.getObject();
+	} catch (JMSException e) {
+	    e.printStackTrace();
+	}
+	System.out.println("Received quote: " + stock.toString());
+        
+
     }
  
     public static void main(String[] args) {

@@ -1,14 +1,22 @@
 package server;
 
 import java.sql.Timestamp;
-
 import java.io.Serializable;
+
+import org.apache.activemq.Message;
 
 public class Stock implements Serializable {
 
+    private static final long serialVersionUID = -7623418515327418953L;
+    
     private String name;
     private double price;
     private Timestamp timestamp;
+    
+    public Stock(String name, double price) {
+	this.name = name;
+	this.price = price;
+    }
 
     public String getName() {
 	return name;
@@ -37,8 +45,7 @@ public class Stock implements Serializable {
     @Override
     public String toString() {
 	return new StringBuffer("Stock: ").append(this.name)
-		.append(" " + this.price)
-		.append(" " + this.timestamp.toString()).toString();
+		.append(" " + this.price).toString();
     }
 
 }
